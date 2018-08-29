@@ -86,6 +86,9 @@ class QualitySelectorMenuButton extends MenuButton {
 
       if (item.label === 'auto') {
         this.el().innerHTML = `<span class='vjs-quality-selector-btn'>${item.label}</span>`;
+        if (player.currentSrc().length === 0) {
+          player.src(item.src);
+        }
         menuItem.addClass('vjs-selected');
       }
       menu.addItem(menuItem);
