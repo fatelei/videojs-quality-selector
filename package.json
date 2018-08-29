@@ -1,6 +1,6 @@
 {
   "name": "videojs-quality-selector",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Video quality selector",
   "main": "dist/videojs-quality-selector.cjs.js",
   "module": "dist/videojs-quality-selector.es.js",
@@ -73,6 +73,7 @@
     "jsdoc": "https://github.com/BrandonOCasey/jsdoc#feat/plugin-from-cli",
     "karma": "^3.0.0",
     "lint-staged": "^7.2.2",
+    "natives": "^1.1.4",
     "not-prerelease": "^1.0.1",
     "npm-merge-driver": "^2.3.5",
     "npm-run-all": "^4.1.3",
