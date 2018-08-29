@@ -41,6 +41,7 @@ class QualitySelectorMenuButton extends MenuButton {
   updateSelectMenu(identify) {
     const player = this.player();
     const qualityLevels = player.options_.qualityLevels || [];
+
     const menuItems = this.children()[1].children();
 
     for (const [index, level] of qualityLevels.entries()) {
@@ -49,9 +50,8 @@ class QualitySelectorMenuButton extends MenuButton {
       }
 
       if (level.identify === identify) {
-        this.el().innerHTML = `<span class='vjs-quality-selector-btn'>${level.label}</span>`;
+        this.el().getElementsByClassName('vjs-quality-selector-btn')[0].textContent = level.label;
         menuItems[index].el().classList.add('vjs-selected');
-        break;
       }
     }
   }
@@ -143,7 +143,7 @@ class QualitySelector extends Plugin {
           break;
         }
       }
-      if (player.currentSrc() !== src) {
+      if (typeof src !== 'undefined' && player.currentSrc() !== src) {
         player.src({
           src
         });
