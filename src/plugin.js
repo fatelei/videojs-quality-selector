@@ -2,6 +2,7 @@ import videojs from 'video.js';
 import {version as VERSION} from '../package.json';
 
 const Plugin = videojs.getPlugin('plugin');
+const Menu = videojs.getComponent('Menu');
 const MenuButton = videojs.getComponent('MenuButton');
 const MenuItem = videojs.getComponent('MenuItem');
 
@@ -14,23 +15,52 @@ const defaults = {};
 class VideoQualityItem extends MenuItem {
   constructor(player, options) {
     super(player, options);
+    this.updateSelectMenu = options.updateSelectMenu;
   }
 
   handleClick() {
-    this.selected(true);
+    this.updateSelectMenu(this.options_.identify);
     this.player().qualitySelector().changeVideoQuality(this.options_.identify);
   }
 }
 
-class QualitySelectorMenu extends MenuButton {
+class QualityMenu extends Menu {
+  constructor(player, options) {
+    super(player, options);
+  }
+}
+
+class QualitySelectorMenuButton extends MenuButton {
   constructor(player, options) {
     super(player, options);
     this.addClass('vjs-quality-selector-menu');
+    this.bindUpdateSelectMenu = this.updateSelectMenu.bind(this);
+    this.createItems();
   }
 
-  createItems() {
+  updateSelectMenu(identify) {
     const player = this.player();
     const qualityLevels = player.options_.qualityLevels || [];
+    const menuItems = this.children()[1].children();
+
+    for (const [index, level] of qualityLevels.entries()) {
+      if (menuItems[index].el().classList.contains('vjs-selected')) {
+        menuItems[index].el().classList.remove('vjs-selected');
+      }
+
+      if (level.identify === identify) {
+        this.el().innerHTML = `<span class='vjs-quality-selector-btn'>${level.label}</span>`;
+        menuItems[index].el().classList.add('vjs-selected');
+        break;
+      }
+    }
+  }
+
+  createMenu() {
+    const menu = new QualityMenu(this.player, this.options_);
+    const player = this.player();
+    const qualityLevels = player.options_.qualityLevels || [];
+
     let hasAuto = false;
 
     for (const level of qualityLevels) {
@@ -47,18 +77,20 @@ class QualitySelectorMenu extends MenuButton {
       });
     }
 
-    return qualityLevels.map(item => {
+    qualityLevels.forEach(item => {
       const menuItem = new VideoQualityItem(player, {
         label: item.label,
-        identify: item.identify
+        identify: item.identify,
+        updateSelectMenu: videojs.bind(this, this.updateSelectMenu)
       });
 
       if (item.label === 'auto') {
         this.el().innerHTML = `<span class='vjs-quality-selector-btn'>${item.label}</span>`;
         menuItem.addClass('vjs-selected');
       }
-      return menuItem;
+      menu.addItem(menuItem);
     });
+    return menu;
   }
 }
 
@@ -112,7 +144,9 @@ class QualitySelector extends Plugin {
         }
       }
       if (player.currentSrc() !== src) {
-        player.src('//vjs.zencdn.net/v/oceans.mp4');
+        player.src({
+          src
+        });
         player.load();
         player.currentTime(currentPlayAt);
         player.play();
@@ -128,7 +162,7 @@ QualitySelector.defaultState = {};
 QualitySelector.VERSION = VERSION;
 
 // Register menu button.
-videojs.registerComponent('qualityMenuButton', QualitySelectorMenu);
+videojs.registerComponent('qualityMenuButton', QualitySelectorMenuButton);
 
 // Register the plugin with video.js.
 videojs.registerPlugin('qualitySelector', QualitySelector);
