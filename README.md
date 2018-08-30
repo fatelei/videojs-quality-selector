@@ -1,6 +1,6 @@
 # videojs-quality-selector
 
-Video quality selector
+Video quality selector plugin
 
 ## Table of Contents
 
@@ -9,6 +9,7 @@ Video quality selector
 ## Installation
 
 - [Installation](#installation)
+- [Config](#config)
 - [Usage](#usage)
   - [`<script>` Tag](#script-tag)
   - [Browserify/CommonJS](#browserifycommonjs)
@@ -19,8 +20,23 @@ Video quality selector
 ## Installation
 
 ```sh
-npm install --save videojs-quality-selector
+npm install --save videojs-quality-selector-plugin
 ```
+
+## Config
+
+```
+qualityLevels = [{
+  label: 'auto',
+  identify: 'foo',
+  src: 'bar'
+}, {
+  label: 'hd',
+  identify: 'hd',
+  src: 'bar1'
+}]
+```
+
 
 ## Usage
 
@@ -32,9 +48,21 @@ This is the simplest case. Get the script in whatever way you prefer and include
 
 ```html
 <script src="//path/to/video.min.js"></script>
-<script src="//path/to/videojs-quality-selector.min.js"></script>
+<script src="//path/to/videojs-quality-selector-plugin.min.js"></script>
 <script>
-  var player = videojs('my-video');
+  var player = videojs('my-video', {
+    qualityLevels: [
+      {
+        label: 'auto',
+        identify: 'foo',
+        src: 'bar'
+      }, {
+        label: 'hd',
+        identify: 'hd',
+        src: 'bar1'
+      }
+    ]
+  });
 
   player.qualitySelector();
 </script>
@@ -42,7 +70,7 @@ This is the simplest case. Get the script in whatever way you prefer and include
 
 ### Browserify/CommonJS
 
-When using with Browserify, install videojs-quality-selector via npm and `require` the plugin as you would any other module.
+When using with Browserify, install videojs-quality-selector-plugin via npm and `require` the plugin as you would any other module.
 
 ```js
 var videojs = require('video.js');
@@ -50,9 +78,21 @@ var videojs = require('video.js');
 // The actual plugin function is exported by this module, but it is also
 // attached to the `Player.prototype`; so, there is no need to assign it
 // to a variable.
-require('videojs-quality-selector');
+require('videojs-quality-selector-plugin');
 
-var player = videojs('my-video');
+var player = videojs('my-video',{
+  qualityLevels: [
+    {
+      label: 'auto',
+      identify: 'foo',
+      src: 'bar'
+    }, {
+      label: 'hd',
+      identify: 'hd',
+      src: 'bar1'
+    }
+  ]
+});
 
 player.qualitySelector();
 ```
@@ -62,8 +102,20 @@ player.qualitySelector();
 When using with RequireJS (or another AMD library), get the script in whatever way you prefer and `require` the plugin as you normally would:
 
 ```js
-require(['video.js', 'videojs-quality-selector'], function(videojs) {
-  var player = videojs('my-video');
+require(['video.js', 'videojs-quality-selector-plugin'], function(videojs) {
+  var player = videojs('my-video', {
+    qualityLevels: [
+      {
+        label: 'auto',
+        identify: 'foo',
+        src: 'bar'
+      }, {
+        label: 'hd',
+        identify: 'hd',
+        src: 'bar1'
+      }
+    ]
+  });
 
   player.qualitySelector();
 });
