@@ -152,7 +152,9 @@ class QualitySelector extends Plugin {
         });
         player.load();
         player.currentTime(currentPlayAt);
-        player.play();
+        if (!player.ended()) {
+          player.play();
+        }
       }
     }
   }
