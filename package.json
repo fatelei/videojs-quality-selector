@@ -1,6 +1,6 @@
 {
   "name": "videojs-quality-selector-plugin",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Video quality selector",
   "main": "dist/videojs-quality-selector-plugin.cjs.js",
   "module": "dist/videojs-quality-selector-plugin.es.js",
