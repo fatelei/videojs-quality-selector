@@ -8,8 +8,6 @@
 </head>
 <body>
   <video id="videojs-quality-selector-player" class="video-js vjs-default-skin" controls>
-    <source src="//vjs.zencdn.net/v/oceans.mp4" type='video/mp4'>
-    <source src="//vjs.zencdn.net/v/oceans.webm" type='video/webm'>
   </video>
   <ul>
     <li><a href="/test/debug.html">Run unit tests in browser.</a></li>
@@ -19,7 +17,19 @@
   <script src="dist/videojs-quality-selector-plugin.js"></script>
   <script>
     (function(window, videojs) {
-      var player = window.player = videojs('videojs-quality-selector-player');
+      var player = window.player = videojs('videojs-quality-selector-player', {
+          qualityLevels: [
+          {
+            identify: 'sd',
+            src: 'http://vjs.zencdn.net/v/oceans.mp4',
+            label: '标清'
+          },
+          {
+            identify: 'hd',
+            src: 'http://vjs.zencdn.net/v/oceans.webm',
+            label: '高清'
+          }
+        ]});
       var qualitySelector = window.qualitySelector = player.qualitySelector();
     }(window, window.videojs));
   </script>

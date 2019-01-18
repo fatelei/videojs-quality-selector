@@ -62,19 +62,15 @@ class QualitySelectorMenuButton extends MenuButton {
     const qualityLevels = player.options_.qualityLevels || [];
 
     let hasAuto = false;
+    let fallbackItem = null;
 
-    for (const level of qualityLevels) {
-      if (level.label === 'auto') {
+    for (const item of qualityLevels) {
+      if (item.label === 'auto') {
         hasAuto = true;
         break;
+      } else if (!fallbackItem) {
+        fallbackItem = item;
       }
-    }
-
-    if (!hasAuto) {
-      qualityLevels.push({
-        label: 'auto',
-        identify: 'sd'
-      });
     }
 
     qualityLevels.forEach(item => {
@@ -84,10 +80,16 @@ class QualitySelectorMenuButton extends MenuButton {
         updateSelectMenu: videojs.bind(this, this.updateSelectMenu)
       });
 
-      if (item.label === 'auto') {
+      if (hasAuto) {
         this.el().innerHTML = `<span class='vjs-quality-selector-btn'>${item.label}</span>`;
         if (player.currentSrc().length === 0) {
           player.src(item.src);
+        }
+        menuItem.addClass('vjs-selected');
+      } else if (item.src === fallbackItem.src) {
+        this.el().innerHTML = `<span class='vjs-quality-selector-btn'>${fallbackItem.label}</span>`;
+        if (player.currentSrc().length === 0) {
+          player.src(fallbackItem.src);
         }
         menuItem.addClass('vjs-selected');
       }
